@@ -151,17 +151,9 @@ unset GIT_DIR # unset git dir or it will mess with goinstall
 cd $p
 if test -e $build/Godeps
 then
-    if test -d $build/vendor
-    then
-        # go1.6+ or GO15VENDOREXPERIMENT
-        echo "-----> Running: godep restore"
-        godep restore
-    else
-        echo "-----> Copying workspace"
-        cp -R $(godep path)/* $GOPATH
-        echo "-----> Running: godep go install ${FLAGS[@]} ./..."
-        godep go install "${FLAGS[@]}" ./...
-    fi
+    # go1.6+ or GO15VENDOREXPERIMENT
+    echo "-----> Running: godep restore"
+    godep restore
 else
     echo "-----> Running: go get ${FLAGS[@]} ./..."
     go get "${FLAGS[@]}" ./...
