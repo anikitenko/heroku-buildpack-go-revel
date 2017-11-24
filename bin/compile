@@ -151,6 +151,21 @@ unset GIT_DIR # unset git dir or it will mess with goinstall
 cd $p
 if test -e $build/Godeps
 then
+    ENV_DIR=${3:-}
+    ssh_key="$(cat $ENV_DIR/SSH_KEY)"
+
+    if [ "$ssh_key" != "" ]; then
+
+    echo "-----> Running SSH private key setup"
+
+	# The .ssh needs to be located in the home directory which is different to the
+	# home directory of the built machine. The symlink resolves the issue.
+	mkdir "$1/.ssh"
+	ln -s "$1/.ssh" "$HOME/.ssh"
+	echo "$ssh_key" | base64 --decode > "$HOME/.ssh/id_rsa"
+
+	fi
+
     # go1.6+ or GO15VENDOREXPERIMENT
     echo "-----> Running: godep restore"
     godep restore
